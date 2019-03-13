@@ -1,0 +1,28 @@
+{
+  "name": "rcs-maap-bot",
+  "version": "1.0.0",
+  "description": "SDK for developing RCS MaaP compliant chatbots",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pvangool/rcs-maap-bot.git"
+  },
+  "keywords": [
+    "rcs",
+    "maap",
+    "bot"
+  ],
+  "author": "Paul van Gool <pvangool@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pvangool/rcs-maap-bot/issues"
+  },
+  "homepage": "https://github.com/pvangool/rcs-maap-bot#readme",
+  "dependencies": {
+    "request": "^2.71.0",
+    "request-promise": "^4.1.1"
+  }
+}
