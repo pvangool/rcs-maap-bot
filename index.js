@@ -58,8 +58,14 @@ class Bot extends EventEmitter {
       RCSMessage: {
         isTyping: 'active'
       },
-      messageContact: recipient
+      messageContact: {}
     };
+
+    if (recipient instanceof MessageContact) {
+      messageBody.messageContact = recipient.generate();
+    } else {
+      messageBody.messageContact = recipient;
+    }
 
     let options = {
       method: 'POST',
@@ -75,8 +81,14 @@ class Bot extends EventEmitter {
       RCSMessage: {
         isTyping: 'idle'
       },
-      messageContact: recipient
+      messageContact: {}
     };
+
+    if (recipient instanceof MessageContact) {
+      messageBody.messageContact = recipient.generate();
+    } else {
+      messageBody.messageContact = recipient;
+    }
 
     let options = {
       method: 'POST',
@@ -90,8 +102,14 @@ class Bot extends EventEmitter {
   sendMessage(recipient, content, suggestions, cb) {
     var messageBody = {
       RCSMessage: {},
-      messageContact: recipient
+      messageContact: {}
     };
+
+    if (recipient instanceof MessageContact) {
+      messageBody.messageContact = recipient.generate();
+    } else {
+      messageBody.messageContact = recipient;
+    }
 
     if (typeof content === 'string') {
       messageBody.RCSMessage.textMessage = content;
@@ -265,6 +283,22 @@ class Bot extends EventEmitter {
         if (!cb) return Promise.reject(err)
         cb(err)
       })
+  }
+
+}
+
+class MessageContact {
+
+  constructor (userContact, chatId) {
+    this._userContact = userContact;
+    this._chatId = chatId;
+  }
+
+  generate() {
+    return {
+      userContact: this._userContact,
+      chatId: this._chatId
+    }
   }
 
 }
@@ -530,14 +564,14 @@ class FileMessage {
 
   generate() {
     return {
-      fileUrl: _fileUrl,
-      fileName: _fileName,
-      fileMIMEType: _fileMIMEType,
-      fileSize: _fileSize,
-      thumbnailUrl: _thumbnailUrl,
-      thumbnailFileName: _thumbnailFileName,
-      thumbnailMIMEType: _thumbnailMIMEType,
-      thumbnailFileSize: _thumbnailFileSize
+      fileUrl: this._fileUrl,
+      fileName: this._fileName,
+      fileMIMEType: this._fileMIMEType,
+      fileSize: this._fileSize,
+      thumbnailUrl: this._thumbnailUrl,
+      thumbnailFileName: this._thumbnailFileName,
+      thumbnailMIMEType: this._thumbnailMIMEType,
+      thumbnailFileSize: this._thumbnailFileSize
     }
   }
 
@@ -571,11 +605,11 @@ class AudioMessage {
 
   generate() {
     return {
-      fileUrl: _fileUrl,
-      fileName: _fileName,
-      fileMIMEType: _fileMIMEType,
-      fileSize: _fileSize,
-      playingLength: _playingLength
+      fileUrl: this._fileUrl,
+      fileName: this._fileName,
+      fileMIMEType: this._fileMIMEType,
+      fileSize: this._fileSize,
+      playingLength: this._playingLength
     }
   }
 
@@ -614,12 +648,12 @@ class GeolocationPushMessage {
 
   generate() {
     return {
-      pos: _pos,
-      label: _label,
-      timestamp: _timestamp,
-      expiry: _expiry,
-      timeOffset: _timeOffset,
-      radius: _radius
+      pos: this._pos,
+      label: this._label,
+      timestamp: this._timestamp,
+      expiry: this._expiry,
+      timeOffset: this._timeOffset,
+      radius: this._radius
     }
   }
 
@@ -748,7 +782,7 @@ class RichcardCarousel {
 }
 
 module.exports = {
-  Bot, Suggestions, Richcard, RichcardCarousel,
+  Bot, MessageContact, Suggestions, Richcard, RichcardCarousel,
   MESSAGE_STATUS_CANCELLED, MESSAGE_STATUS_DISPLAYED,
   CALL_TYPE_PHONE, CALL_TYPE_ENRICHED, CALL_TYPE_VIDEO,
   ORIENTATION_VERTICAL, ORIENTATION_HORIZONTAL,
