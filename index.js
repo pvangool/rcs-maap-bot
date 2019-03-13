@@ -678,14 +678,16 @@ class Richcard {
     this._imageAlignment = imageAlignment;
   }
 
-  setMedia(mediaUrl, mediaContentType, mediaFileSize, thumbnailUrl, thumbnailContentType, height) {
+  setMedia(mediaUrl, mediaContentType, mediaFileSize, height, thumbnailUrl, thumbnailContentType, thumbnailFileSize, contentDescription) {
       this._media = {
           mediaUrl: mediaUrl,
           mediaContentType: mediaContentType,
+          mediaFileSize: mediaFileSize,
+          height: height,
           thumbnailUrl: thumbnailUrl,
           thumbnailContentType: thumbnailContentType,
-          mediaFileSize: mediaFileSize,
-          height: height
+          thumbnailFileSize: thumbnailFileSize,
+          contentDescription: contentDescription
       };
   }
 

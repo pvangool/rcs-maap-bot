@@ -332,25 +332,70 @@ Set the `radius` property.
 
 #### constructor()
 
+Returns a new `Richcard` instance.
+
 #### setCardOrientation(cardOrientation)
+
+Set the orientation of the card.
+
+`cardOrientation` - String: Either `Maap.ORIENTATION_HORIZONTAL` or `Maap.ORIENTATION_VERTICAL`.
 
 #### setImageAlignment(imageAlignment)
 
-#### setMedia(mediaUrl, mediaContentType, mediaFileSize, thumbnailUrl, thumbnailContentType, height)
+Set the alignment of the image on the card.
+
+`imageAlignment` - String: Either `Maap.ALIGNMENT_LEFT` or `Maap.ALIGNMENT_RIGHT`.
+
+#### setMedia(mediaUrl, mediaContentType, mediaFileSize, height, [thumbnailUrl], [thumbnailContentType], [thumbnailFileSize], [contentDescription])
+
+Set the media (image) to be displayed on the richcard.
+
+`mediaUrl` - String: The URL to the image.
+`mediaContentType` - String: The content type of the image.
+`mediaFileSize` - Number: The size of the image.
+`height` - String: Either `Maap.MEDIA_SHORT_HEIGHT` or `Maap.MEDIA_MEDIUM_HEIGHT` or `Maap.MEDIA_TALL_HEIGHT`.
+`thumbnailUrl` - (Optional) String: The URL to the thumbnail for the image.
+`thumbnailContentType` - (Optional) String: The content type of the thumbnail.
+`thumbnailFileSize` - (Optional) Number: The size of the thumbnail.
+`contentDescription` - (Optional) String: Textual description of media content.
+
+The `thumbnailUrl` property is optional, but if used, `thumbnailContentType` and `thumbnailFileSize` must be provided as well.
 
 #### setTitle(title)
 
+Set the title of the card.
+
+`title` - String: The title.
+
 #### setDescription(description)
 
+Set the description of the card.
+
+`description` - String: The description.
+
 #### setSuggestions(suggestions)
+
+Add suggestions to the card.
+
+`suggestions` - Suggestions: The suggestions.
 
 ### RichcardCarousel Functions
 
 #### constructor()
 
+Returns a new `RichcardCarousel` instance.
+
 #### setCardWidth(cardWidth)
 
+Set the width of the cards in the carousel.
+
+`cardWidth` - String: Either `Maap.CARD_WIDTH_SMALL` or `Maap.CARD_WIDTH_MEDIUM`.
+
 #### addRichcard(richcard)
+
+Add a card to the carousel.
+
+`richcard` - Richcard: The `Richcard` object.
 
 ### Suggestions Functions
 
