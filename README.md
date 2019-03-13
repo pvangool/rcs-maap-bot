@@ -195,49 +195,49 @@ An `FileMessage` object representes a file and has the following properties:
 
 Returns a new `FileMessage` instance.
 
-`fileUrl` - String: The URL of the file.
+* `fileUrl` - String: The URL of the file.
 
 #### setFileName(fileName)
 
 Set the `fileName` property.
 
-`fileName` - String: The file name.
+* `fileName` - String: The file name.
 
 #### setFileMIMEType(fileMIMEType)
 
 Set the `fileMIMEType` property.
 
-`fileMIMEType` - String: The MIME type of the file.
+* `fileMIMEType` - String: The MIME type of the file.
 
 #### setFileSize(fileSize)
 
 Set the `fileSize` property.
 
-`fileSize` - Number: The size of the file.
+* `fileSize` - Number: The size of the file.
 
 #### setThumbnailUrl(thumbnailUrl)
 
 Set the `thumbnailUrl` property.
 
-`thumbnailUrl` - String: The URL of the thumbnail.
+* `thumbnailUrl` - String: The URL of the thumbnail.
 
 #### setThumbnailFileName(thumbnailFileName)
 
 Set the `thumbnailFileName` property.
 
-`thumbnailFileName` - String: The file name of the thumbnail.
+* `thumbnailFileName` - String: The file name of the thumbnail.
 
 #### setThumbnailMIMEType(thumbnailMIMEType)
 
 Set the `thumbnailMIMEType` property.
 
-`thumbnailMIMEType` - String: The MIME type of the thumbnail.
+* `thumbnailMIMEType` - String: The MIME type of the thumbnail.
 
 #### setThumbnailFileSize(thumbnailFileSize)
 
 Set the `thumbnailFileSize` property.
 
-`thumbnailFileSize` - Number: The size of the thumbnail.
+* `thumbnailFileSize` - Number: The size of the thumbnail.
 
 ### AudioMessage Functions
 
@@ -255,31 +255,31 @@ An `AudioMessage` object representes an audio file and has the following propert
 
 Returns a new `AudioMessage` instance.
 
-`fileUrl` - String: The URL of the file.
+* `fileUrl` - String: The URL of the file.
 
 #### setFileName(fileName)
 
 Set the `fileName` property.
 
-`fileName` - String: The file name.
+* `fileName` - String: The file name.
 
 #### setFileMIMEType(fileMIMEType)
 
 Set the `fileMIMEType` property.
 
-`fileMIMEType` - String: The MIME type of the file.
+* `fileMIMEType` - String: The MIME type of the file.
 
 #### setFileSize(fileSize)
 
 Set the `fileSize` property.
 
-`fileSize` - Number: The size of the file.
+* `fileSize` - Number: The size of the file.
 
 #### setPlayingLength(playingLength)
 
 Set the `playingLength` property.
 
-`playingLength` - Number: The playing length of the audio.
+* `playingLength` - Number: The playing length of the audio.
 
 ### GeolocationPushMessage
 
@@ -296,37 +296,37 @@ Set the `playingLength` property.
 
 Returns a new `GeolocationPushMessage` instance. This is a geolocation push to be sent via RCS Geolocation Push.
 
-`pos` - String: This are the coordinates in WGS 84 (latitude, longitude) decimal notation.
+* `pos` - String: This are the coordinates in WGS 84 (latitude, longitude) decimal notation.
 
 #### setLabel(label)
 
 Set the `label` property.
 
-`label` - String: This can be used to tag the nature of the location.
+* `label` - String: This can be used to tag the nature of the location.
 
 #### setTimestamp(timestamp)
 
 Set the `timestamp` property.
 
-`timestamp` - String: This is the time when the location information was pushed.
+* `timestamp` - String: This is the time when the location information was pushed.
 
 #### setExpiry(expiry)
 
 Set the `expiry` property.
 
-`expiry` - String: This is an absolute date at which time the recipient is no longer permitted to possess the location information.
+* `expiry` - String: This is an absolute date at which time the recipient is no longer permitted to possess the location information.
 
 #### setTimeOffset(timeOffset)
 
 Set the `timeOffset` property.
 
-`timeOffset` - Number: This is the time zone where the location information was pushed, expressed as the number of minutes away from UTC.
+* `timeOffset` - Number: This is the time zone where the location information was pushed, expressed as the number of minutes away from UTC.
 
 #### setRadius(radius)
 
 Set the `radius` property.
 
-`radius` - Number: The radius of the circle will be represented in meters.
+* `radius` - Number: The radius of the circle will be represented in meters.
 
 ### Richcard Functions
 
@@ -338,26 +338,26 @@ Returns a new `Richcard` instance.
 
 Set the orientation of the card.
 
-`cardOrientation` - String: Either `Maap.ORIENTATION_HORIZONTAL` or `Maap.ORIENTATION_VERTICAL`.
+* `cardOrientation` - String: Either `Maap.ORIENTATION_HORIZONTAL` or `Maap.ORIENTATION_VERTICAL`.
 
 #### setImageAlignment(imageAlignment)
 
 Set the alignment of the image on the card.
 
-`imageAlignment` - String: Either `Maap.ALIGNMENT_LEFT` or `Maap.ALIGNMENT_RIGHT`.
+* `imageAlignment` - String: Either `Maap.ALIGNMENT_LEFT` or `Maap.ALIGNMENT_RIGHT`.
 
 #### setMedia(mediaUrl, mediaContentType, mediaFileSize, height, [thumbnailUrl], [thumbnailContentType], [thumbnailFileSize], [contentDescription])
 
 Set the media (image) to be displayed on the richcard.
 
-`mediaUrl` - String: The URL to the image.
-`mediaContentType` - String: The content type of the image.
-`mediaFileSize` - Number: The size of the image.
-`height` - String: Either `Maap.MEDIA_SHORT_HEIGHT` or `Maap.MEDIA_MEDIUM_HEIGHT` or `Maap.MEDIA_TALL_HEIGHT`.
-`thumbnailUrl` - (Optional) String: The URL to the thumbnail for the image.
-`thumbnailContentType` - (Optional) String: The content type of the thumbnail.
-`thumbnailFileSize` - (Optional) Number: The size of the thumbnail.
-`contentDescription` - (Optional) String: Textual description of media content.
+* `mediaUrl` - String: The URL to the image.
+* `mediaContentType` - String: The content type of the image.
+* `mediaFileSize` - Number: The size of the image.
+* `height` - String: Either `Maap.MEDIA_SHORT_HEIGHT` or `Maap.MEDIA_MEDIUM_HEIGHT` or `Maap.MEDIA_TALL_HEIGHT`.
+* `thumbnailUrl` - (Optional) String: The URL to the thumbnail for the image.
+* `thumbnailContentType` - (Optional) String: The content type of the thumbnail.
+* `thumbnailFileSize` - (Optional) Number: The size of the thumbnail.
+* `contentDescription` - (Optional) String: Textual description of media content.
 
 The `thumbnailUrl` property is optional, but if used, `thumbnailContentType` and `thumbnailFileSize` must be provided as well.
 
@@ -365,19 +365,19 @@ The `thumbnailUrl` property is optional, but if used, `thumbnailContentType` and
 
 Set the title of the card.
 
-`title` - String: The title.
+* `title` - String: The title.
 
 #### setDescription(description)
 
 Set the description of the card.
 
-`description` - String: The description.
+* `description` - String: The description.
 
 #### setSuggestions(suggestions)
 
 Add suggestions to the card.
 
-`suggestions` - Suggestions: The suggestions.
+* `suggestions` - Suggestions: The suggestions.
 
 ### RichcardCarousel Functions
 
@@ -389,13 +389,13 @@ Returns a new `RichcardCarousel` instance.
 
 Set the width of the cards in the carousel.
 
-`cardWidth` - String: Either `Maap.CARD_WIDTH_SMALL` or `Maap.CARD_WIDTH_MEDIUM`.
+* `cardWidth` - String: Either `Maap.CARD_WIDTH_SMALL` or `Maap.CARD_WIDTH_MEDIUM`.
 
 #### addRichcard(richcard)
 
 Add a card to the carousel.
 
-`richcard` - Richcard: The `Richcard` object.
+* `richcard` - Richcard: The `Richcard` object.
 
 ### Suggestions Functions
 
