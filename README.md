@@ -43,6 +43,47 @@ http.createServer(bot.handleWebhook()).listen(3000)
 console.log('Echo bot server running on port 3000.')
 ```
 
+`reply` Is a convenience function that calls `bot.sendMessage`, with the recipient already set to the message
+sender.
+
+An example of calling `bot.sendMessage` with `suggestions` is below:
+
+```js
+bot.on('message', (payload, reply) => {
+  let suggestions = new Maap.Suggestions();
+  suggestions.addReply('English', 'Language_en');
+  suggestions.addReply('日本語', 'Language_jp');
+
+  bot.sendMessage(
+    payload.messageContact,
+    "What language do you prefer?",
+    suggestions,
+    (err, body) => {
+      if (err) throw err
+    }
+  )
+})
+```
+
+Specifiying the `recipient` can be done by creating a `MessageContact` object:
+
+```js
+bot.on('message', (payload, reply) => {
+  let suggestions = new Maap.Suggestions();
+  suggestions.addReply('English', 'Language_en');
+  suggestions.addReply('日本語', 'Language_jp');
+
+  bot.sendMessage(
+    new Maap.MessageContact("+18055551234", null),
+    "What language do you prefer?",
+    suggestions,
+    (err, body) => {
+      if (err) throw err
+    }
+  )
+})
+```
+
 ## Usage
 
 ### Bot Functions
@@ -55,29 +96,85 @@ Returns a new `Bot` instance.
 
 * `token` - String: The authentication token for your bot.
 * `api_url` - String: The URL to the MaaP gateway endpoint (http://host:port/serverRoot/rcs/bot/v1).
-* `bot_id` - String: The ID for your bot.
+* `bot_id` - String: The identifier for your bot.
 
 #### sendMessage(recipient, content, [suggestions], [cb])
 
+Sends a message with `content` and optional `suggestions` to the target `recipient`, and calls the callback if any. Returns a promise.
+
+* `recipient` - Object: A `MessageContact` object.
+* `content` - Object: The message payload. Either a string, an `AudioMessage` object, a `FileMessage` object, a `GeolocationPushMessage` object, a `Richcard` object, or a `RichcardCarousel` object.
+* `suggestions` - (Optional) Object: A `Suggestions` object.
+* `cb` - (Optional) Function: Called with `(err, body)` once the request has completed. `err` contains an error, if any, and `body` contains the response from the MaaP gateway.
+
 #### getMessageStatus(messageId, [cb])
+
+Gets the status of a message with `messageId`, and calls the callback if any. Returns a promise.
+
+* `messageId` - String: The message identifier.
+* `cb` - (Optional) Function: Called with `(err, body)` once the request has completed. `err` contains an error, if any, and `body` contains the response from the MaaP gateway.
 
 #### updateMessageStatus(messageId, status, [cb])
 
+Updates the status of a message with `messageId` to `status`, and calls the callback if any. Returns a promise.
+
+* `messageId` - String: The message identifier.
+* `status` - String: The requested status. Needs to be either `Maap.MESSAGE_STATUS_CANCELLED` or `Maap.MESSAGE_STATUS_DISPLAYED`.
+* `cb` - (Optional) Function: Called with `(err, body)` once the request has completed. `err` contains an error, if any, and `body` contains the response from the MaaP gateway.
+
 #### getContactCapabilities(userContact, chatId, [cb])
+
+Gets the capabilities for a subscriber, and calls the callback if any. Returns a promise. Either `userContact` or `chatId` needs to be specified.
+
+* `userContact` - String: The subscriber's MSISDN.
+* `chatId` - String: The user's anonymous token.
+* `cb` - (Optional) Function: Called with `(err, body)` once the request has completed. `err` contains an error, if any, and `body` contains the response from the MaaP gateway.
 
 #### uploadFile(path, url, fileType, until, [cb])
 
+Uploads a file of type `fileType` to the MaaP content storage until it expires at date `until`, and calls the callback if any. Returns a promise. Either `path` or `url` needs to be specified.
+
+* `path` - String: The path to the file.
+* `url` - String: The URL to the file.
+* `fileType` - String: The file's content type.
+* `until` - Date: The date at which time the content should be expired.
+* `cb` - (Optional) Function: Called with `(err, body)` once the request has completed. `err` contains an error, if any, and `body` contains the response from the MaaP gateway.
+
 #### deleteFile(fileId, [cb])
+
+Deletes a file with identifier `fileId` from the MaaP content storage, and calls the callback if any. Returns a promise.
+
+* `fileId` - String: The file identifier.
+* `cb` - (Optional) Function: Called with `(err, body)` once the request has completed. `err` contains an error, if any, and `body` contains the response from the MaaP gateway.
 
 #### getFile(fileId, [cb])
 
+Gets info for a file with identifier `fileId` from the MaaP content storage, and calls the callback if any. Returns a promise.
+
+* `fileId` - String: The file identifier.
+* `cb` - (Optional) Function: Called with `(err, body)` once the request has completed. `err` contains an error, if any, and `body` contains the response from the MaaP gateway.
+
 #### startTyping(recipient, [cb])
+
+Starts the 'is typing' indicator for the target `recipient`, and calls the callback if any. Returns a promise.
+
+* `recipient` - Object: A `MessageContact` object.
+* `cb` - (Optional) Function: Called with `(err, body)` once the request has completed. `err` contains an error, if any, and `body` contains the response from the MaaP gateway.
 
 #### stopTyping(recipient, [cb])
 
+Stops the 'is typing' indicator for the target `recipient`, and calls the callback if any. Returns a promise.
+
+* `recipient` - Object: A `MessageContact` object.
+* `cb` - (Optional) Function: Called with `(err, body)` once the request has completed. `err` contains an error, if any, and `body` contains the response from the MaaP gateway.
+
 #### handleWebhook()
 
+The main middleware for your bot's webhook. Returns a function.
+
 #### handleRequest(json)
+
+The underlying method used by `bot.handleWebhook()` to parse the message payload, and fire the appropriate events.
 
 ### FileMessage Functions
 
