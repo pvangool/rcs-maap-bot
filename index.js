@@ -58,8 +58,14 @@ class Bot extends EventEmitter {
       RCSMessage: {
         isTyping: 'active'
       },
-      messageContact: recipient
+      messageContact: {}
     };
+
+    if (recipient instanceof MessageContact) {
+      messageBody.messageContact = recipient.generate();
+    } else {
+      messageBody.messageContact = recipient;
+    }
 
     let options = {
       method: 'POST',
@@ -75,8 +81,14 @@ class Bot extends EventEmitter {
       RCSMessage: {
         isTyping: 'idle'
       },
-      messageContact: recipient
+      messageContact: {}
     };
+
+    if (recipient instanceof MessageContact) {
+      messageBody.messageContact = recipient.generate();
+    } else {
+      messageBody.messageContact = recipient;
+    }
 
     let options = {
       method: 'POST',
@@ -88,9 +100,6 @@ class Bot extends EventEmitter {
   }
 
   sendMessage(recipient, content, suggestions, cb) {
-console.log(typeof recipient)
-console.log(recipient)
-
     var messageBody = {
       RCSMessage: {},
       messageContact: {}
