@@ -11,7 +11,7 @@ let bot = new Maap.Bot({
 
 bot.on('message', (payload, reply) => {
   reply(
-    "You wrote: " + payload.RCSMessage.textMessage,
+    'You wrote: ' + payload.RCSMessage.textMessage,
     null,
     (err, body) => {
       if (err) throw err
