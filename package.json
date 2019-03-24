@@ -16,7 +16,7 @@
     "bot"
   ],
   "author": "Paul van Gool <pvangool@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/pvangool/rcs-maap-bot/issues"
   },
