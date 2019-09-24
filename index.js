@@ -2,36 +2,35 @@
 
 const EventEmitter = require('events').EventEmitter
 const request = require('request-promise')
-const fs = require('fs');
+const fs = require('fs')
 
-const MESSAGE_STATUS_CANCELLED = 'cancelled';
-const MESSAGE_STATUS_DISPLAYED = 'displayed';
+const MESSAGE_STATUS_CANCELLED = 'cancelled'
+const MESSAGE_STATUS_DISPLAYED = 'displayed'
 
-const CALL_TYPE_PHONE = 'dialPhoneNumber';
-const CALL_TYPE_ENRICHED = 'dialEnrichedCall';
-const CALL_TYPE_VIDEO = 'dialVideoCall';
+const CALL_TYPE_PHONE = 'dialPhoneNumber'
+const CALL_TYPE_ENRICHED = 'dialEnrichedCall'
+const CALL_TYPE_VIDEO = 'dialVideoCall'
 
-const ORIENTATION_VERTICAL = 'VERTICAL';
-const ORIENTATION_HORIZONTAL = 'HORIZONTAL';
+const ORIENTATION_VERTICAL = 'VERTICAL'
+const ORIENTATION_HORIZONTAL = 'HORIZONTAL'
 
-const ALIGNMENT_LEFT = 'LEFT';
-const ALIGNMENT_RIGHT = 'RIGHT';
+const ALIGNMENT_LEFT = 'LEFT'
+const ALIGNMENT_RIGHT = 'RIGHT'
 
-const MEDIA_SHORT_HEIGHT = 'SHORT_HEIGHT';
-const MEDIA_MEDIUM_HEIGHT = 'MEDIUM_HEIGHT';
-const MEDIA_TALL_HEIGHT = 'TALL_HEIGHT';
+const MEDIA_SHORT_HEIGHT = 'SHORT_HEIGHT'
+const MEDIA_MEDIUM_HEIGHT = 'MEDIUM_HEIGHT'
+const MEDIA_TALL_HEIGHT = 'TALL_HEIGHT'
 
-const CARD_WIDTH_SMALL = 'SMALL_WIDTH';
-const CARD_WIDTH_MEDIUM = 'MEDIUM_WIDTH';
+const CARD_WIDTH_SMALL = 'SMALL_WIDTH'
+const CARD_WIDTH_MEDIUM = 'MEDIUM_WIDTH'
 
-const SETTINGS_DISABLEANONYMIZATION = 'disableAnonymization';
-const SETTINGS_ENABLEDISPLAYEDNOTIFICATIONS = 'enableDisplayedNotifications';
+const SETTINGS_DISABLEANONYMIZATION = 'disableAnonymization'
+const SETTINGS_ENABLEDISPLAYEDNOTIFICATIONS = 'enableDisplayedNotifications'
 
-const RECORDING_TYPE_AUDIO = 'AUDIO';
-const RECORDING_TYPE_VIDEO = 'VIDEO';
+const RECORDING_TYPE_AUDIO = 'AUDIO'
+const RECORDING_TYPE_VIDEO = 'VIDEO'
 
 class Bot extends EventEmitter {
-
   constructor (opts) {
     super()
 
@@ -53,18 +52,18 @@ class Bot extends EventEmitter {
     this.bot_id = opts.bot_id
   }
 
-  startTyping(recipient, cb) {
+  startTyping (recipient, cb) {
     var messageBody = {
       RCSMessage: {
         isTyping: 'active'
       },
       messageContact: {}
-    };
+    }
 
     if (recipient instanceof MessageContact) {
-      messageBody.messageContact = recipient.generate();
+      messageBody.messageContact = recipient.generate()
     } else {
-      messageBody.messageContact = recipient;
+      messageBody.messageContact = recipient
     }
 
     let options = {
@@ -76,18 +75,18 @@ class Bot extends EventEmitter {
     this.sendRequest(options, cb)
   }
 
-  stopTyping(recipient, cb) {
+  stopTyping (recipient, cb) {
     var messageBody = {
       RCSMessage: {
         isTyping: 'idle'
       },
       messageContact: {}
-    };
+    }
 
     if (recipient instanceof MessageContact) {
-      messageBody.messageContact = recipient.generate();
+      messageBody.messageContact = recipient.generate()
     } else {
-      messageBody.messageContact = recipient;
+      messageBody.messageContact = recipient
     }
 
     let options = {
@@ -99,42 +98,42 @@ class Bot extends EventEmitter {
     this.sendRequest(options, cb)
   }
 
-  sendMessage(recipient, content, suggestions, cb) {
+  sendMessage (recipient, content, suggestions, cb) {
     var messageBody = {
       RCSMessage: {},
       messageContact: {}
-    };
+    }
 
     if (recipient instanceof MessageContact) {
-      messageBody.messageContact = recipient.generate();
+      messageBody.messageContact = recipient.generate()
     } else {
-      messageBody.messageContact = recipient;
+      messageBody.messageContact = recipient
     }
 
     if (typeof content === 'string') {
-      messageBody.RCSMessage.textMessage = content;
+      messageBody.RCSMessage.textMessage = content
     } else if (content instanceof Richcard) {
-      messageBody.RCSMessage.richcardMessage = content.generate();
+      messageBody.RCSMessage.richcardMessage = content.generate()
     } else if (content instanceof RichcardCarousel) {
-      messageBody.RCSMessage.richcardMessage = content.generate();
+      messageBody.RCSMessage.richcardMessage = content.generate()
     } else if (content instanceof FileMessage) {
-      messageBody.RCSMessage.fileMessage = content.generate();
+      messageBody.RCSMessage.fileMessage = content.generate()
     } else if (content instanceof AudioMessage) {
-      messageBody.RCSMessage.audioMessage = content.generate();
+      messageBody.RCSMessage.audioMessage = content.generate()
     } else if (content instanceof GeolocationPushMessage) {
-      messageBody.RCSMessage.geolocationPushMessage = content.generate();
+      messageBody.RCSMessage.geolocationPushMessage = content.generate()
     } else {
       throw new Error('Unsupported content type.')
     }
 
     if (suggestions) {
-        if (suggestions instanceof Suggestions) {
-            messageBody.RCSMessage.suggestedChipList = {
-                suggestions: suggestions.generate()
-            };
-        } else {
-            throw new Error('Unsupported suggestions type.')
+      if (suggestions instanceof Suggestions) {
+        messageBody.RCSMessage.suggestedChipList = {
+          suggestions: suggestions.generate()
         }
+      } else {
+        throw new Error('Unsupported suggestions type.')
+      }
     }
 
     let options = {
@@ -146,7 +145,7 @@ class Bot extends EventEmitter {
     this.sendRequest(options, cb)
   }
 
-  getMessageStatus(messageId, cb) {
+  getMessageStatus (messageId, cb) {
     let options = {
       method: 'GET',
       uri: this.api_url + '/' + this.bot_id + '/messages/' + messageId + '/status'
@@ -155,12 +154,12 @@ class Bot extends EventEmitter {
     this.sendRequest(options, cb)
   }
 
-  updateMessageStatus(messageId, status, cb) {
+  updateMessageStatus (messageId, status, cb) {
     var messageBody = {
       RCSMessage: {
         status: status
       }
-    };
+    }
 
     let options = {
       method: 'PUT',
@@ -171,7 +170,7 @@ class Bot extends EventEmitter {
     this.sendRequest(options, cb)
   }
 
-  getContactCapabilities(userContact, chatId, cb) {
+  getContactCapabilities (userContact, chatId, cb) {
     let qs = {}
 
     if (userContact) {
@@ -190,10 +189,10 @@ class Bot extends EventEmitter {
     this.sendRequest(options, cb)
   }
 
-  uploadFile(path, url, fileType, until, cb) {
+  uploadFile (path, url, fileType, until, cb) {
     if (!until) {
-      let date = new Date();
-      until = new Date(date.setTime(date.getTime() + 30 * 86400000));
+      let date = new Date()
+      until = new Date(date.setTime(date.getTime() + 30 * 86400000))
     }
 
     let options = {
@@ -214,7 +213,7 @@ class Bot extends EventEmitter {
     this.sendRequest(options, cb)
   }
 
-  deleteFile(fileId, cb) {
+  deleteFile (fileId, cb) {
     let options = {
       method: 'DELETE',
       uri: this.api_url + '/' + this.bot_id + '/files/' + fileId
@@ -223,7 +222,7 @@ class Bot extends EventEmitter {
     this.sendRequest(options, cb)
   }
 
-  getFile(fileId, cb) {
+  getFile (fileId, cb) {
     let options = {
       method: 'GET',
       uri: this.api_url + '/' + this.bot_id + '/files/' + fileId
@@ -252,15 +251,15 @@ class Bot extends EventEmitter {
             this.handleRequest(json)
           }
         } catch (e) {
-          console.error(e);
+          console.error(e)
         }
 
-        res.end(JSON.stringify({status: 'ok'}))
+        res.end(JSON.stringify({ status: 'ok' }))
       })
     }
   }
 
-  handleRequest(json) {
+  handleRequest (json) {
     if (json.messageContact !== null) {
       this.emit(json.event, json, this.sendMessage.bind(this, json.messageContact))
     } else {
@@ -268,7 +267,7 @@ class Bot extends EventEmitter {
     }
   }
 
-  sendRequest(options, cb) {
+  sendRequest (options, cb) {
     options.headers = {
       'Authorization': 'Bearer ' + this.token
     }
@@ -284,32 +283,28 @@ class Bot extends EventEmitter {
         cb(err)
       })
   }
-
 }
 
 class MessageContact {
-
   constructor (userContact, chatId) {
-    this._userContact = userContact;
-    this._chatId = chatId;
+    this._userContact = userContact
+    this._chatId = chatId
   }
 
-  generate() {
+  generate () {
     return {
       userContact: this._userContact,
       chatId: this._chatId
     }
   }
-
 }
 
 class Suggestions {
-
   constructor () {
-    this._suggestions = new Array();
+    this._suggestions = []
   }
 
-  addReply(displayText, postbackData) {
+  addReply (displayText, postbackData) {
     let suggestion = {
       reply: {
         displayText: displayText,
@@ -317,12 +312,12 @@ class Suggestions {
           data: postbackData
         }
       }
-    };
+    }
 
-    this._suggestions.push(suggestion);
+    this._suggestions.push(suggestion)
   }
 
-  addUrlAction(displayText, postbackData, url) {
+  addUrlAction (displayText, postbackData, url) {
     let suggestion = {
       action: {
         urlAction: {
@@ -335,12 +330,12 @@ class Suggestions {
           data: postbackData
         }
       }
-    };
+    }
 
-    this._suggestions.push(suggestion);
+    this._suggestions.push(suggestion)
   }
 
-  addDialerAction(displayText, postbackData, dialType, phoneNumber, fallbackUrl, subject) {
+  addDialerAction (displayText, postbackData, dialType, phoneNumber, fallbackUrl, subject) {
     let suggestion = {
       action: {
         dialerAction: {},
@@ -349,33 +344,33 @@ class Suggestions {
           data: postbackData
         }
       }
-    };
+    }
 
     switch (dialType) {
       case CALL_TYPE_PHONE:
-        suggestion.action.dialerAction.dialPhoneNumber = {};
-        suggestion.action.dialerAction.dialPhoneNumber.phoneNumber = phoneNumber;
-        suggestion.action.dialerAction.dialPhoneNumber.fallbackUrl = fallbackUrl;
-        break;
+        suggestion.action.dialerAction.dialPhoneNumber = {}
+        suggestion.action.dialerAction.dialPhoneNumber.phoneNumber = phoneNumber
+        suggestion.action.dialerAction.dialPhoneNumber.fallbackUrl = fallbackUrl
+        break
 
       case CALL_TYPE_ENRICHED:
-        suggestion.action.dialerAction.dialEnrichedCall = {};
-        suggestion.action.dialerAction.dialEnrichedCall.phoneNumber = phoneNumber;
-        suggestion.action.dialerAction.dialEnrichedCall.fallbackUrl = fallbackUrl;
-        suggestion.action.dialerAction.dialEnrichedCall.subject = subject;
-        break;
+        suggestion.action.dialerAction.dialEnrichedCall = {}
+        suggestion.action.dialerAction.dialEnrichedCall.phoneNumber = phoneNumber
+        suggestion.action.dialerAction.dialEnrichedCall.fallbackUrl = fallbackUrl
+        suggestion.action.dialerAction.dialEnrichedCall.subject = subject
+        break
 
       case CALL_TYPE_VIDEO:
-        suggestion.action.dialerAction.dialVideoCall = {};
-        suggestion.action.dialerAction.dialVideoCall.phoneNumber = phoneNumber;
-        suggestion.action.dialerAction.dialVideoCall.fallbackUrl = fallbackUrl;
-        break;
+        suggestion.action.dialerAction.dialVideoCall = {}
+        suggestion.action.dialerAction.dialVideoCall.phoneNumber = phoneNumber
+        suggestion.action.dialerAction.dialVideoCall.fallbackUrl = fallbackUrl
+        break
     }
 
-    this._suggestions.push(suggestion);
+    this._suggestions.push(suggestion)
   }
 
-  addRequestLocationPushMapAction(displayText, postbackData) {
+  addRequestLocationPushMapAction (displayText, postbackData) {
     let suggestion = {
       action: {
         mapAction: {
@@ -386,12 +381,12 @@ class Suggestions {
           data: postbackData
         }
       }
-    };
+    }
 
-    this._suggestions.push(suggestion);
+    this._suggestions.push(suggestion)
   }
 
-  addShowLocationMapAction(displayText, postbackData, latitude, longitude, label, query, fallbackUrl) {
+  addShowLocationMapAction (displayText, postbackData, latitude, longitude, label, query, fallbackUrl) {
     let suggestion = {
       action: {
         mapAction: {
@@ -410,17 +405,17 @@ class Suggestions {
           data: postbackData
         }
       }
-    };
+    }
 
-    this._suggestions.push(suggestion);
+    this._suggestions.push(suggestion)
   }
 
-  addCalendarAction(displayText, postbackData, startTime, endTime, title, description, fallbackUrl) {
+  addCalendarAction (displayText, postbackData, startTime, endTime, title, description, fallbackUrl) {
     let suggestion = {
       action: {
         calendarAction: {
           createCalendarEvent: {
-            startTime : startTime,
+            startTime: startTime,
             endTime: endTime,
             title: title,
             description: description,
@@ -432,12 +427,12 @@ class Suggestions {
           data: postbackData
         }
       }
-    };
+    }
 
-    this._suggestions.push(suggestion);
+    this._suggestions.push(suggestion)
   }
 
-  addTextComposeAction(displayText, postbackData, phoneNumber, text) {
+  addTextComposeAction (displayText, postbackData, phoneNumber, text) {
     let suggestion = {
       action: {
         composeAction: {
@@ -451,12 +446,12 @@ class Suggestions {
           data: postbackData
         }
       }
-    };
+    }
 
-    this._suggestions.push(suggestion);
+    this._suggestions.push(suggestion)
   }
 
-  addRecordingComposeAction(displayText, postbackData, phoneNumber, type) {
+  addRecordingComposeAction (displayText, postbackData, phoneNumber, type) {
     let suggestion = {
       action: {
         composeAction: {
@@ -470,12 +465,12 @@ class Suggestions {
           data: postbackData
         }
       }
-    };
+    }
 
-    this._suggestions.push(suggestion);
+    this._suggestions.push(suggestion)
   }
 
-  addDeviceAction(displayText, postbackData) {
+  addDeviceAction (displayText, postbackData) {
     let suggestion = {
       action: {
         deviceAction: {
@@ -486,12 +481,12 @@ class Suggestions {
           data: postbackData
         }
       }
-    };
+    }
 
-    this._suggestions.push(suggestion);
+    this._suggestions.push(suggestion)
   }
 
-  addSettingsAction(displayText, postbackData, settingsType) {
+  addSettingsAction (displayText, postbackData, settingsType) {
     let suggestion = {
       action: {
         settingsAction: {},
@@ -500,69 +495,67 @@ class Suggestions {
           data: postbackData
         }
       }
-    };
+    }
 
     switch (settingsType) {
       case SETTINGS_DISABLEANONYMIZATION:
-        suggestion.action.settingsAction.disableAnonymization = {};
-        break;
+        suggestion.action.settingsAction.disableAnonymization = {}
+        break
 
       case SETTINGS_ENABLEDISPLAYEDNOTIFICATIONS:
-        suggestion.action.settingsAction.enableDisplayedNotifications = {};
-        break;
+        suggestion.action.settingsAction.enableDisplayedNotifications = {}
+        break
     }
 
-    this._suggestions.push(suggestion);
+    this._suggestions.push(suggestion)
   }
 
-  generate() {
-    return this._suggestions;
+  generate () {
+    return this._suggestions
   }
-
 }
 
 class FileMessage {
-
   constructor (fileUrl) {
-    this._fileUrl = fileUrl;
-    this._fileName = null;
-    this._fileMIMEType = null;
-    this._fileSize = null;
-    this._thumbnailUrl = null;
-    this._thumbnailFileName = null;
-    this._thumbnailMIMEType = null;
-    this._thumbnailFileSize = null;
+    this._fileUrl = fileUrl
+    this._fileName = null
+    this._fileMIMEType = null
+    this._fileSize = null
+    this._thumbnailUrl = null
+    this._thumbnailFileName = null
+    this._thumbnailMIMEType = null
+    this._thumbnailFileSize = null
   }
 
-  setFileName(fileName) {
-    this._fileName = fileName;
+  setFileName (fileName) {
+    this._fileName = fileName
   }
 
-  setFileMIMEType(fileMIMEType) {
-    this._fileMIMEType = fileMIMEType;
+  setFileMIMEType (fileMIMEType) {
+    this._fileMIMEType = fileMIMEType
   }
 
-  setFileSize(fileSize) {
-    this._fileSize = fileSize;
+  setFileSize (fileSize) {
+    this._fileSize = fileSize
   }
 
-  setThumbnailUrl(thumbnailUrl) {
-    this._thumbnailUrl = thumbnailUrl;
+  setThumbnailUrl (thumbnailUrl) {
+    this._thumbnailUrl = thumbnailUrl
   }
 
-  setThumbnailFileName(thumbnailFileName) {
-    this._thumbnailFileName = thumbnailFileName;
+  setThumbnailFileName (thumbnailFileName) {
+    this._thumbnailFileName = thumbnailFileName
   }
 
-  setThumbnailMIMEType(thumbnailMIMEType) {
-    this._thumbnailMIMEType = thumbnailMIMEType;
+  setThumbnailMIMEType (thumbnailMIMEType) {
+    this._thumbnailMIMEType = thumbnailMIMEType
   }
 
-  setThumbnailFileSize(thumbnailFileSize) {
-    this._thumbnailFileSize = thumbnailFileSize;
+  setThumbnailFileSize (thumbnailFileSize) {
+    this._thumbnailFileSize = thumbnailFileSize
   }
 
-  generate() {
+  generate () {
     return {
       fileUrl: this._fileUrl,
       fileName: this._fileName,
@@ -574,36 +567,34 @@ class FileMessage {
       thumbnailFileSize: this._thumbnailFileSize
     }
   }
-
 }
 
 class AudioMessage {
-
   constructor (fileUrl) {
-    this._fileUrl = fileUrl;
-    this._fileName = null;
-    this._fileMIMEType = null;
-    this._fileSize = null;
-    this._playingLength = null;
+    this._fileUrl = fileUrl
+    this._fileName = null
+    this._fileMIMEType = null
+    this._fileSize = null
+    this._playingLength = null
   }
 
-  setFileName(fileName) {
-    this._fileName = fileName;
+  setFileName (fileName) {
+    this._fileName = fileName
   }
 
-  setFileMIMEType(fileMIMEType) {
-    this._fileMIMEType = fileMIMEType;
+  setFileMIMEType (fileMIMEType) {
+    this._fileMIMEType = fileMIMEType
   }
 
-  setFileSize(fileSize) {
-    this._fileSize = fileSize;
+  setFileSize (fileSize) {
+    this._fileSize = fileSize
   }
 
-  setPlayingLength(playingLength) {
-    this._playingLength = playingLength;
+  setPlayingLength (playingLength) {
+    this._playingLength = playingLength
   }
 
-  generate() {
+  generate () {
     return {
       fileUrl: this._fileUrl,
       fileName: this._fileName,
@@ -612,41 +603,39 @@ class AudioMessage {
       playingLength: this._playingLength
     }
   }
-
 }
 
 class GeolocationPushMessage {
-
   constructor (pos) {
-    this._pos = pos;
-    this._label = null;
-    this._timestamp = null;
-    this._expiry = null;
-    this._timeOffset = null;
-    this._radius = null;
+    this._pos = pos
+    this._label = null
+    this._timestamp = null
+    this._expiry = null
+    this._timeOffset = null
+    this._radius = null
   }
 
-  setLabel(label) {
-    this._label = label;
+  setLabel (label) {
+    this._label = label
   }
 
-  setTimestamp(timestamp) {
-    this._timestamp = timestamp;
+  setTimestamp (timestamp) {
+    this._timestamp = timestamp
   }
 
-  setExpiry(expiry) {
-    this._expiry = expiry;
+  setExpiry (expiry) {
+    this._expiry = expiry
   }
 
-  setTimeOffset(timeOffset) {
-    this._timeOffset = timeOffset;
+  setTimeOffset (timeOffset) {
+    this._timeOffset = timeOffset
   }
 
-  setRadius(radius) {
-    this._radius = radius;
+  setRadius (radius) {
+    this._radius = radius
   }
 
-  generate() {
+  generate () {
     return {
       pos: this._pos,
       label: this._label,
@@ -656,54 +645,52 @@ class GeolocationPushMessage {
       radius: this._radius
     }
   }
-
 }
 
 class Richcard {
-
   constructor () {
-    this._cardOrientation = ORIENTATION_VERTICAL;
-    this._imageAlignment = null;
-    this._media = null;
-    this._title = null;
-    this._description = null;
-    this._suggestions = null;
+    this._cardOrientation = ORIENTATION_VERTICAL
+    this._imageAlignment = null
+    this._media = null
+    this._title = null
+    this._description = null
+    this._suggestions = null
   }
 
-  setCardOrientation(cardOrientation) {
-    this._cardOrientation = cardOrientation;
+  setCardOrientation (cardOrientation) {
+    this._cardOrientation = cardOrientation
   }
 
-  setImageAlignment(imageAlignment) {
-    this._imageAlignment = imageAlignment;
+  setImageAlignment (imageAlignment) {
+    this._imageAlignment = imageAlignment
   }
 
-  setMedia(mediaUrl, mediaContentType, mediaFileSize, height, thumbnailUrl, thumbnailContentType, thumbnailFileSize, contentDescription) {
-      this._media = {
-          mediaUrl: mediaUrl,
-          mediaContentType: mediaContentType,
-          mediaFileSize: mediaFileSize,
-          height: height,
-          thumbnailUrl: thumbnailUrl,
-          thumbnailContentType: thumbnailContentType,
-          thumbnailFileSize: thumbnailFileSize,
-          contentDescription: contentDescription
-      };
+  setMedia (mediaUrl, mediaContentType, mediaFileSize, height, thumbnailUrl, thumbnailContentType, thumbnailFileSize, contentDescription) {
+    this._media = {
+      mediaUrl: mediaUrl,
+      mediaContentType: mediaContentType,
+      mediaFileSize: mediaFileSize,
+      height: height,
+      thumbnailUrl: thumbnailUrl,
+      thumbnailContentType: thumbnailContentType,
+      thumbnailFileSize: thumbnailFileSize,
+      contentDescription: contentDescription
+    }
   }
 
-  setTitle(title) {
-    this._title = title;
+  setTitle (title) {
+    this._title = title
   }
 
-  setDescription(description) {
-    this._description = description;
+  setDescription (description) {
+    this._description = description
   }
 
-  setSuggestions(suggestions) {
-    this._suggestions = suggestions;
+  setSuggestions (suggestions) {
+    this._suggestions = suggestions
   }
 
-  generate() {
+  generate () {
     let richcard = {
       message: {
         generalPurposeCard: {
@@ -711,58 +698,56 @@ class Richcard {
           content: {}
         }
       }
-    };
-
-    richcard.message.generalPurposeCard.layout.cardOrientation = this._cardOrientation;
-    if (this._cardOrientation === ORIENTATION_HORIZONTAL) {
-      richcard.message.generalPurposeCard.layout.imageAlignment = this._imageAlignment;
     }
 
-    richcard.message.generalPurposeCard.content = this.generateContent();
+    richcard.message.generalPurposeCard.layout.cardOrientation = this._cardOrientation
+    if (this._cardOrientation === ORIENTATION_HORIZONTAL) {
+      richcard.message.generalPurposeCard.layout.imageAlignment = this._imageAlignment
+    }
 
-    return richcard;
+    richcard.message.generalPurposeCard.content = this.generateContent()
+
+    return richcard
   }
 
-  generateContent() {
-    let content = {};
+  generateContent () {
+    let content = {}
 
     if (this._media) {
-      content.media = this._media;
+      content.media = this._media
     }
 
     if (this._title) {
-      content.title = this._title;
+      content.title = this._title
     }
 
     if (this._description) {
-      content.description = this._description;
+      content.description = this._description
     }
 
     if (this._suggestions) {
-      content.suggestions = this._suggestions.generate();
+      content.suggestions = this._suggestions.generate()
     }
 
-    return content;
+    return content
   }
-
 }
 
 class RichcardCarousel {
-
   constructor () {
-    this._cardWidth = CARD_WIDTH_SMALL;
-    this._richcards = new Array();
+    this._cardWidth = CARD_WIDTH_SMALL
+    this._richcards = []
   }
 
-  setCardWidth(cardWidth) {
-    this._cardWidth = cardWidth;
+  setCardWidth (cardWidth) {
+    this._cardWidth = cardWidth
   }
 
-  addRichcard(richcard) {
-    this._richcards.push(richcard);
+  addRichcard (richcard) {
+    this._richcards.push(richcard)
   }
 
-  generate() {
+  generate () {
     let richcardcarousel = {
       message: {
         generalPurposeCardCarousel: {
@@ -770,27 +755,40 @@ class RichcardCarousel {
           content: []
         }
       }
-    };
-
-    richcardcarousel.message.generalPurposeCardCarousel.layout.cardWidth = this._cardWidth;
-
-    for (let i = 0; i < this._richcards.length; i++) {
-      richcardcarousel.message.generalPurposeCardCarousel.content.push(this._richcards[i].generateContent());
     }
 
-    return richcardcarousel;
-  }
+    richcardcarousel.message.generalPurposeCardCarousel.layout.cardWidth = this._cardWidth
 
+    for (let i = 0; i < this._richcards.length; i++) {
+      richcardcarousel.message.generalPurposeCardCarousel.content.push(this._richcards[i].generateContent())
+    }
+
+    return richcardcarousel
+  }
 }
 
 module.exports = {
-  Bot, MessageContact, Suggestions, Richcard, RichcardCarousel,
-  MESSAGE_STATUS_CANCELLED, MESSAGE_STATUS_DISPLAYED,
-  CALL_TYPE_PHONE, CALL_TYPE_ENRICHED, CALL_TYPE_VIDEO,
-  ORIENTATION_VERTICAL, ORIENTATION_HORIZONTAL,
-  ALIGNMENT_LEFT, ALIGNMENT_RIGHT,
-  MEDIA_SHORT_HEIGHT, MEDIA_MEDIUM_HEIGHT, MEDIA_TALL_HEIGHT,
-  CARD_WIDTH_SMALL, CARD_WIDTH_MEDIUM,
-  SETTINGS_DISABLEANONYMIZATION, SETTINGS_ENABLEDISPLAYEDNOTIFICATIONS,
-  RECORDING_TYPE_AUDIO, RECORDING_TYPE_VIDEO
+  Bot,
+  MessageContact,
+  Suggestions,
+  Richcard,
+  RichcardCarousel,
+  MESSAGE_STATUS_CANCELLED,
+  MESSAGE_STATUS_DISPLAYED,
+  CALL_TYPE_PHONE,
+  CALL_TYPE_ENRICHED,
+  CALL_TYPE_VIDEO,
+  ORIENTATION_VERTICAL,
+  ORIENTATION_HORIZONTAL,
+  ALIGNMENT_LEFT,
+  ALIGNMENT_RIGHT,
+  MEDIA_SHORT_HEIGHT,
+  MEDIA_MEDIUM_HEIGHT,
+  MEDIA_TALL_HEIGHT,
+  CARD_WIDTH_SMALL,
+  CARD_WIDTH_MEDIUM,
+  SETTINGS_DISABLEANONYMIZATION,
+  SETTINGS_ENABLEDISPLAYEDNOTIFICATIONS,
+  RECORDING_TYPE_AUDIO,
+  RECORDING_TYPE_VIDEO
 }

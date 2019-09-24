@@ -13,7 +13,7 @@ let bot = new Maap.Bot({
 
 bot.on('message', (payload, reply) => {
   reply(
-    "You wrote: " + payload.RCSMessage.textMessage,
+    'You wrote: ' + payload.RCSMessage.textMessage,
     null,
     (err, body) => {
       if (err) throw err
@@ -31,7 +31,7 @@ app.use(bodyParser.urlencoded({
 
 app.post('/', (req, res) => {
   bot.handleRequest(req.body)
-  res.end(JSON.stringify({status: 'ok'}))
+  res.end(JSON.stringify({ status: 'ok' }))
 })
 
 http.createServer(app).listen(3000)

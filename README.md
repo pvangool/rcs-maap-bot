@@ -1,4 +1,7 @@
 # rcs-maap-bot
+[![npm version](https://img.shields.io/npm/v/rcs-maap-bot.svg)](https://www.npmjs.com/package/rcs-maap-bot)
+[![dependencies](https://david-dm.org/pvangool/rcs-maap-bot.svg)](https://david-dm.org/pvangool/rcs-maap-bot)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
 A Node client for [RCS MaaP chatbots](https://www.gsma.com/futurenetworks/wp-content/uploads/2017/11/FNW.11_v1.0.pdf).
 
