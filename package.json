@@ -1,6 +1,6 @@
 {
   "name": "rcs-maap-bot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SDK for developing RCS MaaP compliant chatbots",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,11 @@
   },
   "homepage": "https://github.com/pvangool/rcs-maap-bot#readme",
   "dependencies": {
-    "request": "^2.71.0",
-    "request-promise": "^4.1.1"
-  }
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
+  },
+  "directories": {
+    "example": "example"
+  },
+  "devDependencies": {}
 }
